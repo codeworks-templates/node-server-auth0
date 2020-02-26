@@ -5,16 +5,16 @@ import { profilesService } from "../services/ProfilesService";
 
 export class ProfilesController extends BaseController {
   constructor() {
-    super("/profile");
+    super("api/profile");
     this.router = express
       .Router()
-      .use(auth0Provider.isAuthorized)
+      .use(auth0Provider.getAuthorizedUserInfo)
       .get("", this.getUserProfile)
       .put("/:id", this.edit);
   }
   async getUserProfile(req, res, next) {
     try {
-      let profile = await profilesService.getProfile(req.user);
+      let profile = await profilesService.getProfile(req.userInfo);
       res.send(profile);
     } catch (error) {
       next(error);
