@@ -1,5 +1,5 @@
 {
-  "name": "server-template",
+  "name": "{{name}}",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "dev": "node index.js",
     "setup": "npm install"
   },
-  "author": "Boise Codeworks",
+  "author": "Codeworks",
   "license": "ISC",
   "dependencies": {
     "@bcwdev/auth0provider": "^0.0.6",
