@@ -1,6 +1,6 @@
 import express from "express";
 import BaseController from "../utils/BaseController";
-import { valuesService } from "../services/ValueService";
+import { valuesService } from "../services/ValuesService";
 import auth0Provider from "@bcwdev/auth0Provider";
 
 export class ValuesController extends BaseController {
@@ -13,20 +13,20 @@ export class ValuesController extends BaseController {
       .use(auth0Provider.isAuthorized)
       .post("", this.create);
   }
-  async getAll(_, res, next) {
+  async getAll(req, res, next) {
     try {
       return res.send(["value1", "value2"]);
     } catch (error) {
       next(error);
     }
   }
-  async create(req, res, next){
+  async create(req, res, next) {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
-      req.body.creatorId = req.user.sub
-      res.send(req.body)
+      req.body.creatorId = req.user.sub;
+      res.send(req.body);
     } catch (error) {
-        next(error)
+      next(error);
     }
   }
 }
