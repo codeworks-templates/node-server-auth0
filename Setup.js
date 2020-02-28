@@ -28,7 +28,7 @@ export function RegisterControllers(router) {
       }
     } catch (e) {
       console.error(
-        "[CONTROLLER ERROR] unable to load controller, potential duplication, review mount path and controller class name",
+        "[CONTROLLER ERROR] unable to load controller, potential duplication, review mount path and controller class name, and see error below",
         controllerName,
         e
       );
