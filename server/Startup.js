@@ -37,7 +37,12 @@ export default class Startup {
   }
 
   static registerErrorHandlers(app) {
-    // NOTE SEND 404 for any unknown routes
+    // NOTE SEND JSON 404 for any unknown routes
+    app.use("/api", (_, res, next) => {
+      res.status(404).send({ status: 404, message: "Not Found" });
+    });
+
+    // NOTE SEND HTML 404 for any unknown routes
     app.use(
       "*",
       (_, res, next) => {

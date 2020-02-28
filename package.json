@@ -18,6 +18,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.21.2",
+    "lightpath": "0.0.5",
     "mongoose": "^5.8.0",
     "socket.io": "^2.3.0"
   },
