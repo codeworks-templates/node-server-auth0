@@ -1,7 +1,7 @@
 import express from "express";
 import BaseController from "../utils/BaseController";
 import { valuesService } from "../services/ValuesService";
-import auth0Provider from "@bcwdev/auth0Provider";
+import auth0Provider from "@bcwdev/auth0provider";
 
 export class ValuesController extends BaseController {
   constructor() {

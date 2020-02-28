@@ -1,5 +1,5 @@
 import express from "express";
-import Socket from "./Services/SocketService";
+import Socket from "./services/SocketService";
 import Startup from "./Startup";
 import DbContext from "./db/DbConfig";
 
