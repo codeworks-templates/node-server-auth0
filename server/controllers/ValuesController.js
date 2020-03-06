@@ -6,8 +6,7 @@ import auth0Provider from "@bcwdev/auth0provider";
 export class ValuesController extends BaseController {
   constructor() {
     super("api/values");
-    this.router = express
-      .Router()
+    this.router
       .get("", this.getAll)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(auth0Provider.isAuthorized)
