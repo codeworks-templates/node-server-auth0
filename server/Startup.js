@@ -3,28 +3,28 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { RegisterControllers, Paths } from "../Setup";
-import auth0Provider from "@bcwdev/auth0provider";
+import { Auth0Provider } from "@bcwdev/auth0provider";
 
 export default class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
     let whitelist = ["http://localhost:8080"];
     let corsOptions = {
-      origin: function(origin, callback) {
+      origin: function (origin, callback) {
         let originIsWhitelisted = whitelist.indexOf(origin) !== -1;
         callback(null, originIsWhitelisted);
       },
-      credentials: true
+      credentials: true,
     };
     app.use(helmet());
     app.use(cors(corsOptions));
     app.use(bp.json({ limit: "50mb" }));
 
     // NOTE Configures auth0 middleware that is used throughout controllers
-    auth0Provider.configure({
+    Auth0Provider.configure({
       domain: process.env.AUTH_DOMAIN,
       clientId: process.env.AUTH_CLIENT_ID,
-      audience: process.env.AUTH_AUDIENCE
+      audience: process.env.AUTH_AUDIENCE,
     });
   }
   static ConfigureRoutes(app) {
