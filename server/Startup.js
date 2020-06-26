@@ -59,7 +59,7 @@ export default class Startup {
       if (error.status == 500) {
         console.error(error); // should write to external
       }
-      res.status(error.status).send({ ...error, url: req.url });
+      res.status(error.status).send({ error: { message: error.toString(), status: error.status }, url: req.url });;
     });
   }
 }
