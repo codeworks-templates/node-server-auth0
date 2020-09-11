@@ -1,5 +1,5 @@
 {
-  "name": "{{name}}",
+  "name": "codeworks-auth-starter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,8 @@
     "debug": "node index.js",
     "start": "node index.js",
     "dev": "node index.js",
-    "setup": "npm install"
+    "setup": "npm install",
+    "sass": "sass --watch client/assets/scss/main.scss:client/assets/style/main.css"
   },
   "author": "Codeworks",
   "license": "ISC",
@@ -25,5 +26,9 @@
   "engines": {
     "node": "^12.0.0",
     "npm": "^6.9.0"
+  },
+  "devDependencies": {
+    "bootstrap": "^4.5.2",
+    "sass": "^1.26.10"
   }
 }
