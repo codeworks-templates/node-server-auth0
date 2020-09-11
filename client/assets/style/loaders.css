@@ -1,0 +1,78 @@
+.skeleton-loader {
+  box-shadow: 0 4px 10px 0 rgba(33, 33, 33, 0.15);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  background-color: #dcdcdc;
+  pointer-events: none;
+}
+.skeleton-loader.dark {
+  background-color: #9d9c9c;
+}
+.skeleton-loader.card {
+  background-color: #fff;
+}
+.skeleton-loader.card::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(to right, transparent 0%, #f6f6f6 50%, transparent 100%);
+  animation: load 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  width: 50%;
+}
+.skeleton-loader.avatar {
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
+}
+.skeleton-loader.avatar.tile {
+  border-radius: 5%;
+}
+.skeleton-loader.avatar.md {
+  height: 65px;
+  width: 65px;
+}
+.skeleton-loader.avatar.lg {
+  height: 85px;
+  width: 85px;
+}
+.skeleton-loader.text {
+  width: clamp(50%, 160px, 100%);
+  height: 1rem;
+  line-height: 1.5rem;
+  margin: 0.5rem 0;
+}
+.skeleton-loader.text.sm {
+  width: clamp(25%, 80px, 100%);
+}
+.skeleton-loader.text.lg {
+  width: clamp(75%, 250px, 100%);
+}
+.skeleton-loader.text.block {
+  width: clamp(100%, 500px, 100%);
+}
+.skeleton-loader::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 50px;
+  background: linear-gradient(to right, transparent 0%, #E8E8E8 50%, transparent 100%);
+  animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes load {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+/*# sourceMappingURL=loaders.css.map */
