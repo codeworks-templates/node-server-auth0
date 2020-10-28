@@ -9,6 +9,6 @@ export default class BaseController {
       mount = "/" + mount;
     }
     this.mount = mount;
-    this.router = express.Router();
+    this.router = express.Router({ mergeParams: true });
   }
 }

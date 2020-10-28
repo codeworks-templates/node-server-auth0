@@ -5,15 +5,15 @@ const Value = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    creatorEmail: { type: String, required: true }
+    creatorId: { type: String, ref: "Profile", required: true }
   },
   { timestamps: true, toJSON: { virtuals: true } }
 );
 
 Value.virtual("creator", {
-  localField: "creatorEmail",
+  localField: "creatorId",
   ref: "Profile",
-  foreignField: "email",
+  foreignField: "_id",
   justOne: true
 });
 
