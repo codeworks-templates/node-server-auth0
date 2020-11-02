@@ -1,31 +1,31 @@
-import express from "express";
-import BaseController from "../utils/BaseController";
-import { valuesService } from "../services/ValuesService";
-import { Auth0Provider } from "@bcwdev/auth0provider";
+import BaseController from '../utils/BaseController'
+import { Auth0Provider } from '@bcwdev/auth0provider'
 
 export class ValuesController extends BaseController {
   constructor() {
-    super("api/values");
+    super('api/values')
     this.router
-      .get("", this.getAll)
+      .get('', this.getAll)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(Auth0Provider.getAuthorizedUserInfo)
-      .post("", this.create);
+      .post('', this.create)
   }
+
   async getAll(req, res, next) {
     try {
-      return res.send(["value1", "value2"]);
+      return res.send(['value1', 'value2'])
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
+
   async create(req, res, next) {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
-      req.body.creatorEmail = req.userInfo.email;
-      res.send(req.body);
+      req.body.creatorEmail = req.userInfo.email
+      res.send(req.body)
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 }

@@ -7,6 +7,7 @@ The first thing you will need to provide is in the `.env` file. You will need to
 **_.env_**
 
 ```
+NODE_ENV=dev
 PORT=
 CONNECTION_STRING=
 AUTH_DOMAIN=

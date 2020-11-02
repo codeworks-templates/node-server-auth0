@@ -1,4 +1,4 @@
-import { dbContext } from "../db/DbContext";
+import { dbContext } from '../db/DbContext'
 
 // Private Methods
 
@@ -13,9 +13,9 @@ async function createProfileIfNeeded(profile, user) {
     profile = await dbContext.Profile.create({
       ...user,
       subs: [user.sub]
-    });
+    })
   }
-  return profile;
+  return profile
 }
 
 /**
@@ -26,8 +26,8 @@ async function createProfileIfNeeded(profile, user) {
 async function mergeSubsIfNeeded(profile, user) {
   if (!profile.subs.includes(user.sub)) {
     // @ts-ignore
-    profile.subs.push(user.sub);
-    await profile.save();
+    profile.subs.push(user.sub)
+    await profile.save()
   }
 }
 /**
@@ -35,14 +35,14 @@ async function mergeSubsIfNeeded(profile, user) {
  * @param {any} body
  */
 function sanitizeBody(body) {
-  let writable = {
+  const writable = {
     name: body.name,
     phones: body.phones,
     addresses: body.addresses,
     notes: body.notes,
     picture: body.picture
-  };
-  return writable;
+  }
+  return writable
 }
 
 class ProfileService {
@@ -51,10 +51,10 @@ class ProfileService {
    * @param {String[]} ids Array of email addresses to lookup users by
    */
   async getProfiles(ids = []) {
-    let profiles = await dbContext.Profile.find({
+    const profiles = await dbContext.Profile.find({
       _id: { $in: ids }
-    }).select("email picture name");
-    return profiles;
+    }).select('email picture name')
+    return profiles
   }
 
   /**
@@ -68,24 +68,25 @@ class ProfileService {
   async getProfile(user) {
     let profile = await dbContext.Profile.findOne({
       _id: user.id
-    });
-    profile = await createProfileIfNeeded(profile, user);
-    await mergeSubsIfNeeded(profile, user);
-    return profile;
+    })
+    profile = await createProfileIfNeeded(profile, user)
+    await mergeSubsIfNeeded(profile, user)
+    return profile
   }
+
   /**
-​    * Updates profile with the request body, will only allow changes to editable fields
-​    * @param {any} user Auth0 user object
-​    * @param {any} body Updates to apply to user object
-​    */
+   * Updates profile with the request body, will only allow changes to editable fields
+   *  @param {any} user Auth0 user object
+   *  @param {any} body Updates to apply to user object
+   */
   async updateProfile(user, body) {
-    let update = sanitizeBody(body);
-    let profile = await dbContext.Profile.findOneAndUpdate(
+    const update = sanitizeBody(body)
+    const profile = await dbContext.Profile.findOneAndUpdate(
       { _id: user.id },
       { $set: update },
       { runValidators: true, setDefaultsOnInsert: true, new: true }
-    );
-    return profile;
+    )
+    return profile
   }
 }
-export const profilesService = new ProfileService();
+export const profilesService = new ProfileService()

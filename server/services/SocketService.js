@@ -1,5 +1,6 @@
-import SocketIO from "socket.io";
-import auth0Provider from "@bcwdev/auth0provider";
+import SocketIO from 'socket.io'
+import { Auth0Provider } from '@bcwdev/auth0provider'
+import { logger } from '../utils/Logger'
 class SocketService {
   io = SocketIO();
   /**
@@ -7,11 +8,11 @@ class SocketService {
    */
   setIO(io) {
     try {
-      this.io = io;
-      //Server listeners
-      io.on("connection", this._onConnect());
+      this.io = io
+      // Server listeners
+      io.on('connection', this._onConnect())
     } catch (e) {
-      console.error("[SOCKETSTORE ERROR]", e);
+      logger.error('[SOCKETSTORE ERROR]', e)
     }
   }
 
@@ -20,13 +21,14 @@ class SocketService {
    */
   async Authenticate(socket, bearerToken) {
     try {
-      let user = await auth0Provider.getUserInfoFromBearerToken(bearerToken);
-      socket["user"] = user;
-      socket.join(user.id);
-      socket.emit("AUTHENTICATED");
-      this.io.emit("UserConnected", user.id);
+      const userInfo = await Auth0Provider.getUserInfoFromBearerToken(bearerToken)
+      // @ts-ignore
+      socket.userInfo = userInfo
+      socket.join(userInfo.id)
+      socket.emit('AUTHENTICATED')
+      this.io.emit('UserConnected', userInfo.id)
     } catch (e) {
-      socket.emit("error", e);
+      socket.emit('error', e)
     }
   }
 
@@ -35,14 +37,15 @@ class SocketService {
    * @param {string} room
    */
   JoinRoom(socket, room) {
-    socket.join(room);
+    socket.join(room)
   }
+
   /**
    * @param {SocketIO.Socket} socket
    * @param {string} room
    */
   LeaveRoom(socket, room) {
-    socket.leave(room);
+    socket.leave(room)
   }
 
   /**
@@ -53,57 +56,57 @@ class SocketService {
    */
   messageUser(userId, eventName, payload) {
     try {
-      this.io.to(userId).emit(eventName, payload);
+      this.io.to(userId).emit(eventName, payload)
     } catch (e) {}
   }
 
   messageRoom(room, eventName, payload) {
-    this.io.to(room).emit(eventName, payload);
+    this.io.to(room).emit(eventName, payload)
   }
 
   _onConnect() {
     return socket => {
-      this._newConnection(socket);
+      this._newConnection(socket)
 
-      //STUB Register listeners
+      // STUB Register listeners
 
-      socket.on("dispatch", this._onDispatch(socket));
-      socket.on("disconnect", this._onDisconnect(socket));
-    };
+      socket.on('dispatch', this._onDispatch(socket))
+      socket.on('disconnect', this._onDisconnect(socket))
+    }
   }
 
   _onDisconnect(socket) {
     return () => {
       try {
-        if (!socket.user) {
-          return;
+        if (!socket.userInfo) {
+          return
         }
-        this.io.emit("UserDisconnected", socket.user.id);
+        this.io.emit('UserDisconnected', socket.userInfo.id)
       } catch (e) {}
-    };
+    }
   }
 
   _onDispatch(socket) {
     return (payload = {}) => {
       try {
-        var action = this[payload.action];
-        if (!action || typeof action != "function") {
-          return socket.emit("error", "Unknown Action");
+        const action = this[payload.action]
+        if (!action || typeof action !== 'function') {
+          return socket.emit('error', 'Unknown Action')
         }
-        action.call(this, socket, payload.data);
+        action.call(this, socket, payload.data)
       } catch (e) {}
-    };
+    }
   }
 
   _newConnection(socket) {
-    //Handshake / Confirmation of Connection
-    socket.emit("CONNECTED", {
+    // Handshake / Confirmation of Connection
+    socket.emit('CONNECTED', {
       socket: socket.id,
-      message: "Successfully Connected"
-    });
+      message: 'Successfully Connected'
+    })
   }
 }
 
-const socketService = new SocketService();
+const socketService = new SocketService()
 
-export default socketService;
+export default socketService
