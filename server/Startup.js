@@ -17,7 +17,9 @@ export default class Startup {
       },
       credentials: true
     }
-    app.use(helmet())
+    app.use(helmet({
+        contentSecurityPolicy: false
+      }))
     app.use(cors(corsOptions))
     app.use(bp.json({ limit: '50mb' }))
 
