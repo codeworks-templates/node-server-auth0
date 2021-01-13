@@ -1,11 +1,11 @@
 import { ProxyState } from '../AppState.js'
 import { api } from './AxiosService.js'
 
-class ProfileService {
-  async getProfile() {
+class AccountService {
+  async getAccount() {
     try {
-      const res = await api.get('/profile')
-      ProxyState.profile = res.data
+      const res = await api.get('/account')
+      ProxyState.account = res.data
       console.log(res.data)
     } catch (err) {
       console.error(err)
@@ -13,4 +13,4 @@ class ProfileService {
   }
 }
 
-export const profileService = new ProfileService()
+export const accountService = new AccountService()
