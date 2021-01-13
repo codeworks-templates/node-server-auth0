@@ -12,8 +12,8 @@ export class AccountController extends BaseController {
 
   async getUserAccount(req, res, next) {
     try {
-      const profile = await accountService.getAccount(req.userInfo)
-      res.send(profile)
+      const account = await accountService.getAccount(req.userInfo)
+      res.send(account)
     } catch (error) {
       next(error)
     }
