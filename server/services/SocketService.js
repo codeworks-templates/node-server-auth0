@@ -1,6 +1,8 @@
 import SocketIO from 'socket.io'
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { logger } from '../utils/Logger'
+import { attachHandlers } from '../../Setup'
+import { accountService } from './accountService'
 class SocketService {
   io = SocketIO();
   /**
@@ -19,33 +21,22 @@ class SocketService {
   /**
    * @param {SocketIO.Socket} socket
    */
-  async Authenticate(socket, bearerToken) {
+  async authenticate(socket, bearerToken) {
     try {
-      const userInfo = await Auth0Provider.getUserInfoFromBearerToken(bearerToken)
-      // @ts-ignore
-      socket.userInfo = userInfo
-      socket.join(userInfo.id)
-      socket.emit('AUTHENTICATED')
-      this.io.emit('UserConnected', userInfo.id)
+      const user = await Auth0Provider.getUserInfoFromBearerToken(bearerToken)
+      const profile = await accountService.getAccount(user)
+      const limitedProfile = {
+        id: profile.id,
+        email: profile.email,
+        picture: profile.picture
+      }
+      await attachHandlers(this.io, socket, user, limitedProfile)
+      socket.join(user.id)
+      socket.emit('authenticated', limitedProfile)
+      this.io.emit('UserConnected', user.id)
     } catch (e) {
       socket.emit('error', e)
     }
-  }
-
-  /**
-   * @param {SocketIO.Socket} socket
-   * @param {string} room
-   */
-  JoinRoom(socket, room) {
-    socket.join(room)
-  }
-
-  /**
-   * @param {SocketIO.Socket} socket
-   * @param {string} room
-   */
-  LeaveRoom(socket, room) {
-    socket.leave(room)
   }
 
   /**
@@ -57,7 +48,9 @@ class SocketService {
   messageUser(userId, eventName, payload) {
     try {
       this.io.to(userId).emit(eventName, payload)
-    } catch (e) {}
+    } catch (e) {
+      logger.error('[SOCKET_ERROR] messageUser', e, { userId, eventName, payload })
+    }
   }
 
   messageRoom(room, eventName, payload) {
@@ -67,11 +60,8 @@ class SocketService {
   _onConnect() {
     return socket => {
       this._newConnection(socket)
-
-      // STUB Register listeners
-
-      socket.on('dispatch', this._onDispatch(socket))
       socket.on('disconnect', this._onDisconnect(socket))
+      socket.on('authenticate', (bearerToken) => this.authenticate(socket, bearerToken))
     }
   }
 
@@ -86,21 +76,9 @@ class SocketService {
     }
   }
 
-  _onDispatch(socket) {
-    return (payload = {}) => {
-      try {
-        const action = this[payload.action]
-        if (!action || typeof action !== 'function') {
-          return socket.emit('error', 'Unknown Action')
-        }
-        action.call(this, socket, payload.data)
-      } catch (e) {}
-    }
-  }
-
   _newConnection(socket) {
     // Handshake / Confirmation of Connection
-    socket.emit('CONNECTED', {
+    socket.emit('connected', {
       socket: socket.id,
       message: 'Successfully Connected'
     })
