@@ -48,8 +48,7 @@ export function RegisterControllers(router) {
 
 const HANDLERS = []
 
-async function RegisterHandlers() {
-  if (HANDLERS.length) { return }
+export async function RegisterSocketHandlers() {
   const directory = Paths.Handlers
   const handlers = fs.readdirSync(directory)
   handlers.forEach(async(handlerName) => {
@@ -72,7 +71,6 @@ async function RegisterHandlers() {
 }
 
 export async function attachHandlers(io, socket, user, profile) {
-  await RegisterHandlers()
   HANDLERS.forEach(Handler => {
     try {
       const handler = new Handler(io, socket, user, profile)

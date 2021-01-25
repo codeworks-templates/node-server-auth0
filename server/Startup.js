@@ -2,7 +2,7 @@ import bp from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
-import { RegisterControllers, Paths } from '../Setup'
+import { RegisterControllers, Paths, RegisterSocketHandlers } from '../Setup'
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { logger } from './utils/Logger'
 
@@ -18,8 +18,8 @@ export default class Startup {
       credentials: true
     }
     app.use(helmet({
-        contentSecurityPolicy: false
-      }))
+      contentSecurityPolicy: false
+    }))
     app.use(cors(corsOptions))
     app.use(bp.json({ limit: '50mb' }))
 
@@ -34,6 +34,7 @@ export default class Startup {
   static ConfigureRoutes(app) {
     const router = express.Router()
     RegisterControllers(router)
+    RegisterSocketHandlers()
     app.use(router)
 
     app.use('', express.static(Paths.Public))

@@ -11,4 +11,9 @@ export class SocketHandler {
     this.user = user
     this.profile = profile
   }
+
+  on(event, fn) {
+    this.socket.on(event, fn.bind(this))
+    return this
+  }
 }
