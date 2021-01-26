@@ -2,7 +2,7 @@ import SocketIO from 'socket.io'
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { logger } from '../utils/Logger'
 import { attachHandlers } from '../../Setup'
-import { accountService } from './accountService'
+import { accountService } from './AccountService'
 class SocketService {
   io = SocketIO();
   /**
