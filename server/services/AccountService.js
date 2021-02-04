@@ -46,15 +46,33 @@ function sanitizeBody(body) {
 }
 
 class AccountService {
-  /**
-   * Provided an array of user ids will return an array of user accounts with email picture and name
-   * @param {String[]} ids Array of email addresses to lookup users by
+   /**
+    * Returns a list user profiles from a query search of name or email likeness
+    * limits to first 20 without offset 
+    * @param {string} str
    */
-  async getAccounts(ids = []) {
-    const accounts = await dbContext.Account.find({
-      _id: { $in: ids }
-    }).select('email picture name')
-    return accounts
+  async findProfiles(str = '') {
+    const filter = new RegExp(str, 'ig')
+    const q = {
+      $match: {
+        $or: [{ name: filter }, { email: filter }]
+      }
+    }
+    return await dbContext.Account
+      .aggregate([q])
+      .project('email picture name')
+      .collation({ locale: 'en_US', strength: 1 })
+      .limit(20)
+      .exec()
+  }
+
+  /**
+   * Returns a user profile from the email if one exists
+   * @param {string} email
+   */
+  async findProfile(email) {
+    return await dbContext.Account.findOne({ email })
+      .select('name email picture')
   }
 
   /**
