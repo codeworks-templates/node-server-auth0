@@ -1,9 +1,16 @@
 function log(type, content) {
   if (process.env.NODE_ENV === 'dev') {
     // eslint-disable-next-line no-console
-    console[type](...content)
+    console[type](`[${type}] :: ${new Date().toLocaleTimeString()} :: `, ...content)
   } else {
+    switch (type) {
+      case 'log':
+      case 'assert':
+        return
+    }
     // TODO SEND LOGS TO EXTERNAL SERVICE
+    // eslint-disable-next-line no-console
+    console[type](`[${type}] :: ${new Date().toLocaleTimeString()} :: `, ...content)
   }
 }
 
