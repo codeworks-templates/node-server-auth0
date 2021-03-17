@@ -49,7 +49,8 @@ function extendUserInfo(user, context, callback) {
     const namespace = 'https://YOURDOMAINHERE.auth0.com';
     context.idToken = context.idToken || {};
     context.authorization = context.authorization || {};
-    user.app_metadata = user.app_metadata || { new: true };
+    user.app_metadata = user.app_metadata || { };
+    user.app_metadata.new = user.app_metadata.id ? false : true;
     user.app_metadata.id = user.app_metadata.id || uuid();
 
     for (const key in user.app_metadata) {
