@@ -1,7 +1,7 @@
-const base = window.location.host.includes('localhost') ? '//localhost:3000/' : '/'
+import { baseURL } from '../env.js'
 
 export const api = axios.create({
-  baseURL: base,
-  timeout: 3000,
+  baseURL: baseURL,
+  timeout: 8000,
   withCredentials: true
 })

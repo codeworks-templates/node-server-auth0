@@ -1,19 +1,35 @@
 export class SocketHandler {
   /**
-   * @param {SocketIO.Server} io
-   * @param {SocketIO.Socket} socket
-   * @param {{id: string, email: string}} user
-   * @param {{id: string, email: string}} profile
+   * @param {import('socket.io').Server} io
+   * @param {import('socket.io').Socket} socket
+   * @param {boolean | function():boolean} requiresAuth
    */
-  constructor(io, socket, user, profile) {
+  constructor(io, socket, requiresAuth = false) {
     this.io = io
     this.socket = socket
-    this.user = user
-    this.profile = profile
+    this.user = null
+    this.profile = null
+    if (requiresAuth === true) {
+      requiresAuth = () => this.user
+    }
+    this.requiresAuth = requiresAuth
   }
 
   on(event, fn) {
-    this.socket.on(event, fn.bind(this))
+    this.socket.on(event, (payload) => {
+      if (!this.requiresAuth) {
+        return fn.call(this, payload)
+      }
+      if (!this.requiresAuth()) {
+        return this.socket.emit('error', { message: 'Unauthorized' })
+      }
+      return fn.call(this, payload)
+    })
     return this
+  }
+
+  attachUser(user, profile) {
+    this.user = user
+    this.profile = profile
   }
 }

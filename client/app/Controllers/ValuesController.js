@@ -1,20 +1,19 @@
-import { ProxyState } from "../AppState.js";
-import { valuesService } from "../Services/ValuesService.js";
+import { ProxyState } from '../AppState.js'
+import { valuesService } from '../Services/ValuesService.js'
 
-//Private
+// Private
 function _draw() {
-  let values = ProxyState.values;
-  console.log(values);
+  const values = ProxyState.values
+  console.log(values)
 }
 
-//Public
+// Public
 export default class ValuesController {
   constructor() {
-    ProxyState.on("values", _draw);
+    ProxyState.on('values', _draw)
   }
 
   addValue() {
     valuesService.addValue()
   }
-
 }

@@ -1,25 +1,36 @@
-import SocketIO from 'socket.io'
+import { Server } from 'socket.io'
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { logger } from '../utils/Logger'
 import { attachHandlers } from '../../Setup'
 import { accountService } from './AccountService'
+
+const SOCKET_EVENTS = {
+  connection: 'connection',
+  connected: 'connected',
+  disconnect: 'disconnect',
+  authenticate: 'authenticate',
+  authenticated: 'authenticated',
+  userConnected: 'userConnected',
+  userDisconnected: 'userDisconnected',
+  error: 'error'
+}
+
 class SocketService {
-  io = SocketIO();
+  io = new Server();
   /**
-   * @param {SocketIO.Server} io
+   * @param {Server} io
    */
   setIO(io) {
     try {
       this.io = io
-      // Server listeners
-      io.on('connection', this._onConnect())
+      io.on(SOCKET_EVENTS.connection, this.onConnect())
     } catch (e) {
       logger.error('[SOCKETSTORE ERROR]', e)
     }
   }
 
   /**
-   * @param {SocketIO.Socket} socket
+   * @param {import('socket.io').Socket} socket
    */
   async authenticate(socket, bearerToken) {
     try {
@@ -27,15 +38,17 @@ class SocketService {
       const profile = await accountService.getAccount(user)
       const limitedProfile = {
         id: profile.id,
+        // @ts-ignore
         email: profile.email,
+        // @ts-ignore
         picture: profile.picture
       }
-      await attachHandlers(this.io, socket, user, limitedProfile)
       socket.join(user.id)
-      socket.emit('authenticated', limitedProfile)
-      this.io.emit('UserConnected', user.id)
+      attachHandlers(this.io, socket, user, limitedProfile)
+      socket.emit(SOCKET_EVENTS.authenticated, limitedProfile)
+      this.io.emit(SOCKET_EVENTS.userConnected, user.id)
     } catch (e) {
-      socket.emit('error', e)
+      socket.emit(SOCKET_EVENTS.error, e)
     }
   }
 
@@ -57,28 +70,29 @@ class SocketService {
     this.io.to(room).emit(eventName, payload)
   }
 
-  _onConnect() {
+  onConnect() {
     return socket => {
-      this._newConnection(socket)
-      socket.on('disconnect', this._onDisconnect(socket))
-      socket.on('authenticate', (bearerToken) => this.authenticate(socket, bearerToken))
+      attachHandlers(this.io, socket)
+      this.newConnection(socket)
+      socket.on(SOCKET_EVENTS.disconnect, this.onDisconnect(socket))
+      socket.on(SOCKET_EVENTS.authenticate, (bearerToken) => this.authenticate(socket, bearerToken))
     }
   }
 
-  _onDisconnect(socket) {
+  onDisconnect(socket) {
     return () => {
       try {
         if (!socket.userInfo) {
           return
         }
-        this.io.emit('UserDisconnected', socket.userInfo.id)
+        this.io.emit(SOCKET_EVENTS.userDisconnected, socket.userInfo.id)
       } catch (e) {}
     }
   }
 
-  _newConnection(socket) {
+  newConnection(socket) {
     // Handshake / Confirmation of Connection
-    socket.emit('connected', {
+    socket.emit(SOCKET_EVENTS.connected, {
       socket: socket.id,
       message: 'Successfully Connected'
     })

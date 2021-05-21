@@ -3,11 +3,13 @@ import Socket from './services/SocketService'
 import Startup from './Startup'
 import DbContext from './db/DbConfig'
 import { logger } from './utils/Logger'
+import { Server } from 'socket.io'
+import { createServer } from 'http'
 
 // create server & socketServer
 const app = express()
-const socketServer = require('http').createServer(app)
-const io = require('socket.io')(socketServer)
+const httpServer = createServer(app)
+const io = new Server(httpServer)
 const port = process.env.PORT || 3000
 
 // Establish Socket
@@ -19,6 +21,6 @@ Startup.ConfigureRoutes(app)
 DbContext.connect()
 
 // Start Server
-socketServer.listen(port, () => {
+httpServer.listen(port, () => {
   logger.log(`[SERVING ON PORT: ${port}]`)
 })

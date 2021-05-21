@@ -45,6 +45,13 @@
                 </div>
             </div>
         </div>
+        <div class="row my-3">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary" onclick="app.socketTestController.testSocket()">Socket Test</button>
+                <button class="btn btn-primary" onclick="app.socketTestController.testAuthSocket()">Socket Auth
+                    Test</button>
+            </div>
+        </div>
     </main>
     <footer class="container-fluid bg-dark text-light">
         <div class="row text-center">
@@ -57,6 +64,10 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.auth0.com/js/auth0-spa-js/1.11/auth0-spa-js.production.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jakeoverall/auth0provider-client/browser/AuthProvider.browser.js"></script>
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js"
+        integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a"
+        crossorigin="anonymous"></script>
+
     <script src="app/main.js" type="module"></script>
 </body>
 
