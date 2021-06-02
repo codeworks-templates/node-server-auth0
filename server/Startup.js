@@ -6,7 +6,7 @@ import { RegisterControllers, Paths, RegisterSocketHandlers } from '../Setup'
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { logger } from './utils/Logger'
 
-export default class Startup {
+export class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
     Startup.configureCors(app)

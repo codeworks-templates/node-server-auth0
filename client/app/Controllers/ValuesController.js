@@ -9,7 +9,7 @@ function _draw() {
 }
 
 // Public
-export default class ValuesController {
+export class ValuesController {
   constructor() {
     ProxyState.on('values', _draw)
   }

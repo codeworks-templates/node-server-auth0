@@ -99,6 +99,4 @@ class SocketService {
   }
 }
 
-const socketService = new SocketService()
-
-export default socketService
+export const socketService = new SocketService()

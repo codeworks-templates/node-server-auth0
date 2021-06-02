@@ -1,4 +1,4 @@
-export default class Value {
+export class Value {
   constructor(data) {
     this.title = data.title
   }

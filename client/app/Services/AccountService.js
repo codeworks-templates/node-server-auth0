@@ -1,4 +1,5 @@
 import { ProxyState } from '../AppState.js'
+import { logger } from '../Utils/Logger.js'
 import { api } from './AxiosService.js'
 
 class AccountService {
@@ -6,9 +7,8 @@ class AccountService {
     try {
       const res = await api.get('/account')
       ProxyState.account = res.data
-      console.log(res.data)
     } catch (err) {
-      console.error(err)
+      logger.error(err)
     }
   }
 }

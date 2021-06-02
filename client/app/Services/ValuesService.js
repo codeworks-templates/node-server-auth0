@@ -1,5 +1,5 @@
-import { ProxyState } from "../AppState.js";
-import Value from "../Models/Value.js";
+import { ProxyState } from '../AppState.js'
+import { Value } from '../Models/Value.js'
 
 class ValuesService {
   addValue() {
@@ -7,5 +7,4 @@ class ValuesService {
   }
 }
 
-export const valuesService = new ValuesService();
-
+export const valuesService = new ValuesService()
