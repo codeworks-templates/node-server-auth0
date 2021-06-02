@@ -1,15 +1,15 @@
-/* eslint-disable node/no-path-concat */
 import fs from 'fs'
+import path from 'path'
 import BaseController from './server/utils/BaseController'
 import { logger } from './server/utils/Logger'
 
 export class Paths {
   static get Public() {
-    return `${__dirname}/client/`
+    return path.join(__dirname, 'client')
   }
 
   static get Server() {
-    return `${__dirname}/server`
+    return path.join(__dirname, 'server')
   }
 
   static get Controllers() {
