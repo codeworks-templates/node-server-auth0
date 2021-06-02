@@ -8,4 +8,5 @@ class App {
   socketTestController = new SocketTestController();
 }
 
+// @ts-ignore
 window.app = new App()

@@ -1,3 +1,4 @@
+import { dev } from './env.js'
 import { EventEmitter } from './Utils/EventEmitter.js'
 import { isValidProp } from './Utils/isValidProp.js'
 
@@ -20,3 +21,8 @@ export const ProxyState = new Proxy(new AppState(), {
     return true
   }
 })
+
+if (dev) {
+  // @ts-ignore
+  window.ProxyState = ProxyState
+}
