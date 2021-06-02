@@ -22,6 +22,7 @@ export const AuthService = Auth0Provider.initialize({
 
 AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async() => {
   api.defaults.headers.authorization = AuthService.bearer
+  api.interceptors.request.use(refreshAuthToken)
   ProxyState.user = AuthService.user
   socketService.authenticate(AuthService.bearer)
   await accountService.getAccount()
@@ -30,3 +31,16 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async() => {
 AuthService.on(AuthService.AUTH_EVENTS.TOKEN_CHANGE, () => {
   api.defaults.headers.authorization = AuthService.bearer
 })
+async function refreshAuthToken(config) {
+  if (!AuthService.isAuthenticated) { return config }
+  const expires = AuthService.identity.exp * 1000
+  const expired = expires < Date.now()
+  const needsRefresh = expires < Date.now() + (1000 * 60 * 60 * 12)
+  if (expired) {
+    await AuthService.loginWithPopup()
+  } else if (needsRefresh) {
+    await AuthService.getTokenSilently()
+  }
+  api.defaults.headers.authorization = AuthService.bearer
+  return config
+}
