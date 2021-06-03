@@ -28,9 +28,6 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async() => {
   await accountService.getAccount()
 })
 
-AuthService.on(AuthService.AUTH_EVENTS.TOKEN_CHANGE, () => {
-  api.defaults.headers.authorization = AuthService.bearer
-})
 async function refreshAuthToken(config) {
   if (!AuthService.isAuthenticated) { return config }
   const expires = AuthService.identity.exp * 1000
@@ -38,8 +35,10 @@ async function refreshAuthToken(config) {
   const needsRefresh = expires < Date.now() + (1000 * 60 * 60 * 12)
   if (expired) {
     await AuthService.loginWithPopup()
+    socketService.authenticate(AuthService.bearer)
   } else if (needsRefresh) {
     await AuthService.getTokenSilently()
+    socketService.authenticate(AuthService.bearer)
   }
   api.defaults.headers.authorization = AuthService.bearer
   return config
