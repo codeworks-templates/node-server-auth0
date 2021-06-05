@@ -5,6 +5,7 @@ import { json } from 'body-parser'
 import { RegisterControllers, Paths, RegisterSocketHandlers } from '../Setup'
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { logger } from './utils/Logger'
+import { AccountValidator } from './utils/AccountValidator'
 
 export class Startup {
   static ConfigureGlobalMiddleware(app) {
@@ -46,6 +47,8 @@ export class Startup {
     app.use(router)
 
     app.use('', express.static(Paths.Public))
+    app.use(AccountValidator)
+
     Startup.registerErrorHandlers(app)
   }
 
