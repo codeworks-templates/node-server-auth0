@@ -23,9 +23,9 @@ export const AuthService = Auth0Provider.initialize({
 AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async() => {
   api.defaults.headers.authorization = AuthService.bearer
   api.interceptors.request.use(refreshAuthToken)
-  ProxyState.user = AuthService.user
-  socketService.authenticate(AuthService.bearer)
+  ProxyState.user = AuthService.user    
   await accountService.getAccount()
+  socketService.authenticate(AuthService.bearer)
 })
 
 async function refreshAuthToken(config) {
