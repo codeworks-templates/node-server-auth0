@@ -42,12 +42,12 @@ export class Startup {
 
   static ConfigureRoutes(app) {
     const router = express.Router()
+    app.use(AccountValidator)
     RegisterControllers(router)
     RegisterSocketHandlers()
     app.use(router)
 
     app.use('', express.static(Paths.Public))
-    app.use(AccountValidator)
 
     Startup.registerErrorHandlers(app)
   }
