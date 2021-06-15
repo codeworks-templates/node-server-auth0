@@ -18,6 +18,7 @@ module.exports = {
     ecmaVersion: 2020
   },
   rules: {
+    'no-unused-vars': PROD ? ERROR : WARN,
     'no-console': PROD ? ERROR : WARN,
     'no-debugger': PROD ? ERROR : WARN,
     'space-before-function-paren': [WARN, NEVER]
