@@ -17,13 +17,17 @@ export class SocketHandler {
 
   on(event, fn) {
     this.socket.on(event, (payload) => {
-      if (!this.requiresAuth) {
+      try {
+        if (!this.requiresAuth) {
+          return fn.call(this, payload)
+        }
+        if (!this.requiresAuth()) {
+          return this.socket.emit('error', { message: 'Unauthorized' })
+        }
         return fn.call(this, payload)
+      } catch (e) {
+        this.socket.emit('error', { message: e.message })
       }
-      if (!this.requiresAuth()) {
-        return this.socket.emit('error', { message: 'Unauthorized' })
-      }
-      return fn.call(this, payload)
     })
     return this
   }
