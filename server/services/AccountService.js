@@ -44,35 +44,6 @@ function sanitizeBody(body) {
 
 class AccountService {
   /**
-    * Returns a list user profiles from a query search of name or email likeness
-    * limits to first 20 without offset
-    * @param {string} str
-   */
-  async findProfiles(str = '') {
-    const filter = new RegExp(str, 'ig')
-    const q = {
-      $match: {
-        $or: [{ name: filter }, { email: filter }]
-      }
-    }
-    return await dbContext.Account
-      .aggregate([q])
-      .project('email picture name')
-      .collation({ locale: 'en_US', strength: 1 })
-      .limit(20)
-      .exec()
-  }
-
-  /**
-   * Returns a user profile from the email if one exists
-   * @param {string} email
-   */
-  async findProfile(email) {
-    return await dbContext.Account.findOne({ email })
-      .select('name email picture')
-  }
-
-  /**
    * Returns a user account from the Auth0 user object
    *
    * Creates user if none exists

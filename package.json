@@ -19,7 +19,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
-    "mongoose": "^5.12.10",
+    "mongoose": "^6.0.6",
     "socket.io": "4.1.2"
   },
   "engines": {
