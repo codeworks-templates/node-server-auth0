@@ -23,7 +23,7 @@ class ProfileService {
       .aggregate([{
         $match: { name: filter }
       }])
-      .collation({ locale: 'en_US', strength: 2 })
+      .collation({ locale: 'en_US', strength: 1 })
       .skip(Number(offset))
       .limit(20)
       .exec()
