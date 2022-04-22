@@ -5,9 +5,9 @@ import { logger } from '../Utils/Logger.js'
 
 function drawUser() {
   const user = ProxyState.user
-  const userAvatar = avatarTemplate(user)
+  const account = ProxyState.account
+  const userAvatar = avatarTemplate(account)
   const button = authButton(user)
-
   const template = /* html */ `
     ${userAvatar}
     ${button}
@@ -38,10 +38,9 @@ function _drawAuthSettings() {
   </div>
 `
 }
-
 export class AuthController {
   constructor() {
-    ProxyState.on('user', drawUser)
+    ProxyState.on('account', drawUser)
     AuthService.on(AuthService.AUTH_EVENTS.LOADED, drawUser)
     AuthService.on(AuthService.AUTH_EVENTS.LOADED, _drawAuthSettings)
     drawUser()
@@ -68,19 +67,19 @@ function authButton(user) {
   if (AuthService.loading) { return '' }
   return user.isAuthenticated
     ? /* html */ `
-    <button class="btn btn-small btn-dark text-muted" onclick="app.authController.logout()">✖</button>
+    <button class="btn btn-small btn-dark text-muted selectable" onclick="app.authController.logout()">✖</button>
   `
     : /* html */ `
-    <button class="btn btn-dark" onclick="app.authController.login()">login</button>
+    <button class="btn btn-dark selectable" onclick="app.authController.login()">login</button>
   `
 }
 
-function avatarTemplate(user) {
-  return user.isAuthenticated
+function avatarTemplate(account) {
+  return account.picture
     ? /* html */ `
     <div class="mr-2">
-      <img class="rounded-circle" src="${user.picture}" alt="${user.name}" height="45"/>
-      <span class="mx-1">${user.name}</span>
+      <img class="rounded-circle" src="${account.picture}" alt="${account.name}" height="45"/>
+      <span class="mx-1">${account.name}</span>
       </div>`
     : AuthService.loading
       ? /* html */ `
