@@ -13,17 +13,14 @@
   "author": "Codeworks",
   "license": "ISC",
   "dependencies": {
-    "@bcwdev/auth0provider": "^1.0.7",
+    "@bcwdev/auth0provider": "^1.0.11",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "mongoose": "^6.0.6",
-    "socket.io": "4.1.2"
-  },
-  "engines": {
-    "node": "^14.0.0"
+    "socket.io": "^4.1.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
