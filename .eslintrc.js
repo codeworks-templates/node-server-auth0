@@ -13,7 +13,8 @@ module.exports = {
     'standard'
   ],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 2020,
+    requireConfigFile: false
   },
   rules: {
     'no-unused-vars': PROD ? ERROR : WARN,
