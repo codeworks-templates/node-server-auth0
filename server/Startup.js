@@ -1,11 +1,11 @@
+import { Auth0Provider } from '@bcwdev/auth0provider'
+import { json } from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
-import { json } from 'body-parser'
-import { RegisterControllers, Paths, RegisterSocketHandlers } from '../Setup'
-import { Auth0Provider } from '@bcwdev/auth0provider'
-import { logger } from './utils/Logger'
+import { Paths, RegisterControllers, RegisterSocketHandlers } from '../Setup'
 import { AccountValidator } from './utils/AccountValidator'
+import { logger } from './utils/Logger'
 
 export class Startup {
   static ConfigureGlobalMiddleware(app) {
@@ -18,9 +18,9 @@ export class Startup {
 
     // NOTE Configures auth0 middleware that is used throughout controllers
     Auth0Provider.configure({
-      domain: process.env.AUTH_DOMAIN,
-      clientId: process.env.AUTH_CLIENT_ID,
-      audience: process.env.AUTH_AUDIENCE
+      domain: process.env.AUTH_DOMAIN || '',
+      clientId: process.env.AUTH_CLIENT_ID || '',
+      audience: process.env.AUTH_AUDIENCE || ''
     })
   }
 

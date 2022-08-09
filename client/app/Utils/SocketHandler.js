@@ -1,5 +1,5 @@
-import { logger } from './Logger.js'
 import { baseURL } from '../env.js'
+import { logger } from './Logger.js'
 
 let connected = false
 let queue = []
@@ -56,7 +56,12 @@ export class SocketHandler {
     logger.error('[SOCKET_ERROR]', error)
   }
 
-  emit(action, payload = undefined) {
+  /**
+   * Send a Message to the Server with an optional payload
+   * @param {string} action
+   * @param {any} [payload]
+   */
+  emit(action, payload) {
     if (!connected) {
       logger.log('[ENQUEING_ACTION]', { action, payload })
       return queue.push({ action, payload })

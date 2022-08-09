@@ -12,6 +12,7 @@ function drawUser() {
     ${userAvatar}
     ${button}
   `
+  // @ts-ignore
   document.getElementById('authstate').innerHTML = template
 }
 
