@@ -8,7 +8,7 @@ class ProfileService {
     * @param {string} id
    */
   async getProfileById(id) {
-    const profile = await dbContext.Profiles.findById(id)
+    const profile = await dbContext.Account.findById(id)
     return profile
   }
 
@@ -19,7 +19,7 @@ class ProfileService {
    */
   async findProfiles(name = '', offset = 0) {
     const filter = new RegExp(name, 'ig')
-    return await dbContext.Profiles
+    return await dbContext.Account
       .aggregate([{
         $match: { name: filter }
       }])
