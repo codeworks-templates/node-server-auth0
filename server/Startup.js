@@ -12,7 +12,9 @@ export class Startup {
     // NOTE Configure and Register Middleware
     Startup.configureCors(app)
     app.use(helmet({
-      contentSecurityPolicy: false
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' }
     }))
     app.use(json({ limit: '50mb' }))
 
