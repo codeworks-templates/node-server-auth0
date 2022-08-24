@@ -1,7 +1,7 @@
 import { ProxyState } from '../AppState.js'
 import { audience, clientId, domain } from '../env.js'
 import { accountService } from './AccountService.js'
-import { api } from './AxiosService.js'
+import { server } from './AxiosService.js'
 // import { socketService } from './SocketService.js'
 
 // @ts-ignore
@@ -20,9 +20,9 @@ export const AuthService = Auth0Provider.initialize({
   }
 })
 
-AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async() => {
-  api.defaults.headers.authorization = AuthService.bearer
-  api.interceptors.request.use(refreshAuthToken)
+AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async () => {
+  server.defaults.headers.authorization = AuthService.bearer
+  server.interceptors.request.use(refreshAuthToken)
   ProxyState.user = AuthService.user
   await accountService.getAccount()
   // socketService.authenticate(AuthService.bearer)
@@ -40,6 +40,6 @@ async function refreshAuthToken(config) {
     await AuthService.getTokenSilently()
     // socketService.authenticate(AuthService.bearer)
   }
-  api.defaults.headers.authorization = AuthService.bearer
+  server.defaults.headers.authorization = AuthService.bearer
   return config
 }
