@@ -1,11 +1,11 @@
-import { ProxyState } from '../AppState.js'
+import { appState } from '../AppState.js'
 import { audience, clientId, domain } from '../env.js'
 import { AuthService } from '../Services/AuthService.js'
 import { logger } from '../Utils/Logger.js'
 
 function drawUser() {
-  const user = ProxyState.user
-  const account = ProxyState.account
+  const user = appState.user
+  const account = appState.account
   const userAvatar = avatarTemplate(account)
   const button = authButton(user)
   const template = /* html */ `
@@ -41,7 +41,7 @@ function _drawAuthSettings() {
 }
 export class AuthController {
   constructor() {
-    ProxyState.on('account', drawUser)
+    appState.on('account', drawUser)
     AuthService.on(AuthService.AUTH_EVENTS.LOADED, drawUser)
     AuthService.on(AuthService.AUTH_EVENTS.LOADED, _drawAuthSettings)
     drawUser()
@@ -49,7 +49,7 @@ export class AuthController {
 
   async login() {
     try {
-      await AuthService.loginWithPopup()
+      await AuthService.loginWithRedirect()
     } catch (e) {
       logger.error(e)
     }

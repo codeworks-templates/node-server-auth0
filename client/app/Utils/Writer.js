@@ -6,7 +6,7 @@ function getElem(id) {
   try {
     elems[id] = elems[id] || document.getElementById(id)
     if (!elems[id]) {
-      throw new Error('Invalid element Id ' + id)
+      throw new Error(`Invalid element Id ${id}`)
     }
   } catch (error) {
     console.error('[ATTEMPTING_TO_SET_HTML]', id)

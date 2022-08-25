@@ -12,7 +12,7 @@ class AppState extends EventEmitter {
   socketData = []
 }
 
-export const ProxyState = new Proxy(new AppState(), {
+export const appState = new Proxy(new AppState(), {
   get(target, prop) {
     isValidProp(target, prop)
     return target[prop]
@@ -27,5 +27,5 @@ export const ProxyState = new Proxy(new AppState(), {
 
 if (dev) {
   // @ts-ignore
-  window.ProxyState = ProxyState
+  window.ProxyState = appState
 }

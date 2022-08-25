@@ -1,14 +1,14 @@
-import { ProxyState } from '../AppState.js'
+import { appState } from '../AppState.js'
 import { socketService } from '../Services/SocketService.js'
 import { logger } from '../Utils/Logger.js'
 
 function _drawSocketData() {
-  logger.log('draw socket data', ProxyState.socketData)
+  logger.log('draw socket data', appState.socketData)
 }
 
 export class SocketTestController {
   constructor() {
-    ProxyState.on('socketData', _drawSocketData)
+    appState.on('socketData', _drawSocketData)
   }
 
   testSocket() {
