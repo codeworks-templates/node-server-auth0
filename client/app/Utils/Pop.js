@@ -36,21 +36,21 @@ export class Pop {
 
   /**
    * @param {string} title The title text
-   * @param {string} display 'success', 'error', 'info', 'warning', or 'question'.
-   * @param {string} position 'top', 'top-start', 'top-end', 'center', 'center-start', 'center-end', 'bottom', 'bottom-start', or 'bottom-end'.
+   * @param {'success' | 'error' | 'info' | 'warning' | 'question'} icon
+   * @param {'top' | 'top-start' | 'top-end' | 'center' | 'center-start' | 'center-end' | 'bottom' | 'bottom-start' | 'bottom-end'} position
    * @param {number} timer Time in milliseconds.
    * @param {boolean} progressBar Show progress bar or not respectively.
    * -----------------------------------
    * {@link https://sweetalert2.github.io/#configuration|Check out Sweet Alerts}
    */
   // @ts-ignore
-  static toast(title = 'Warning!', display = 'warning', position = 'top-end', timer = 3000, progressBar = true) {
+  static toast(title = 'Warning!', icon = 'warning', position = 'top-end', timer = 3000, progressBar = true) {
     // @ts-ignore
     Swal.fire({
-      title: title,
-      icon: display,
-      position: position,
-      timer: timer,
+      title,
+      icon,
+      position,
+      timer,
       timerProgressBar: progressBar,
       toast: true,
       showConfirmButton: false
@@ -58,7 +58,7 @@ export class Pop {
   }
 
   /**
-   * @param { AxiosError | Error | String | any } error An Error Object.
+   * @param { AxiosError | Error | string | any } error An Error Object.
    */
   static error(error) {
     if (error.isAxiosError) {
@@ -70,7 +70,7 @@ export class Pop {
   }
 
   /**
-   * @param { String } message The message to display. If not provided, will display a generic message.
+   * @param { string } message The message to display. If not provided, will display a generic message.
    */
   static success(message = 'Success!') {
     this.toast(message, 'success')
