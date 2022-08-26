@@ -1,28 +1,29 @@
 export class Pop {
 
   /**
-   * @typedef {{message: string, response:{ data: any}}} AxiosError
+   * @typedef {{isAxiosError: boolean, message: string, response:{ data: any}}} AxiosError
    */
 
   /**
     * @param {string} title The title text.
     * @param {string} text The body text.
-    * @param {string} icon 'success', 'error', 'info', 'warning', or 'question'.
     * @param {string} confirmButtonText The text of your confirm button.
-    * -----------------------------------
-    * {@link https://sweetalert2.github.io/#configuration|Check out Sweet Alerts}
+    * @param {'success' | 'error' | 'info' | 'warning' | 'question'} icon Pop icon
+    * 
+    * {@link https://sweetalert2.github.io/#configuration | Check out Sweet Alerts}
   */
-  static async confirm(title = 'Are you sure?', text = "You won't be able to revert this!", icon = 'warning', confirmButtonText = 'Yes, delete it!') {
+  static async confirm(title = 'Are you sure?', text = "You won't be able to revert this!", confirmButtonText = 'Yes', icon = 'warning') {
     try {
       // @ts-ignore
       const res = await Swal.fire({
-        title: title,
-        text: text,
-        icon: icon,
+        title,
+        text,
+        icon,
+        confirmButtonText,
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: confirmButtonText
+        reverseButtons: true,
+        confirmButtonColor: 'var(--bs-primary)',
+        cancelButtonColor: 'var(--bs-secondary)',
       })
       if (res.isConfirmed) {
         return true
@@ -42,6 +43,7 @@ export class Pop {
    * -----------------------------------
    * {@link https://sweetalert2.github.io/#configuration|Check out Sweet Alerts}
    */
+  // @ts-ignore
   static toast(title = 'Warning!', display = 'warning', position = 'top-end', timer = 3000, progressBar = true) {
     // @ts-ignore
     Swal.fire({
@@ -56,12 +58,12 @@ export class Pop {
   }
 
   /**
-   * @param {import('axios').AxiosError | Error | String } Error An Error Object.
+   * @param { AxiosError | Error | String | any } error An Error Object.
    */
   static error(error) {
     if (error.isAxiosError) {
       const { response } = error
-      this.toast(response.data.error?.message || response.data.message, 'error')
+      this.toast(response.data.error.message || response.data.message, 'error')
     } else {
       this.toast(error.message || error, 'error')
     }
