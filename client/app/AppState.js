@@ -27,5 +27,5 @@ export const appState = new Proxy(new AppState(), {
 
 if (dev) {
   // @ts-ignore
-  window.ProxyState = appState
+  window.appState = appState
 }

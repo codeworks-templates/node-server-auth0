@@ -1,4 +1,5 @@
 import { logger } from './Logger.js'
+import { Pop } from './Pop.js'
 
 export class EventEmitter {
   _listeners = {}
@@ -11,8 +12,9 @@ export class EventEmitter {
   on(event, fn, thisContext = null) {
     if (typeof fn !== 'function') { return }
     if (!(event in this)) {
-      logger.error(`Unable to register listener for '${event}'`)
-      return
+      const ERROR = new Error(`Unable to register listener for '${event}'`)
+      Pop.error(ERROR)
+      return logger.error(ERROR)
     }
     this._listeners[event] = Array.isArray(this._listeners[event]) ? this._listeners[event] : []
     this._listeners[event] = this._listeners[event] || []
