@@ -79,4 +79,27 @@ export class Pop {
   static success(message = 'Success!') {
     this.toast(message, 'success')
   }
+  
+    /**
+   * @param { string } title The prompt message to display.
+   */
+  static async prompt(title = 'Success!', required = false) {
+    try {
+      // @ts-ignore
+      const res = await Swal.fire({
+        title,
+        input: 'text',
+        showCancelButton: !required,
+      })
+      if (res.isConfirmed && res.value) {
+        return res.value
+      }
+      if (required && !res.isConfirmed) {
+        return await this.prompt(title)
+      }
+    } catch (error) {
+      console.error('[PromptError]', error)
+    }
+  }
+  
 }
