@@ -8,6 +8,8 @@ mongoose.connection.on('connection', () => {
   logger.log('DbConnection Successful')
 })
 
+mongoose.set('strictQuery', false)
+
 export class DbConnection {
   static async connect(connectionstring = process.env.CONNECTION_STRING || '') {
     const status = 0
