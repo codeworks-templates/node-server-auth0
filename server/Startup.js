@@ -10,7 +10,7 @@ import { logger } from './utils/Logger'
 export class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
-    Startup.configureCors(app)
+    app.use(cors(Startup.corsOptions))
     app.use(helmet({
       contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: false,
@@ -26,7 +26,7 @@ export class Startup {
     })
   }
 
-  static configureCors(app) {
+  static get corsOptions() {
     const allowedDomains = []
     const corsOptions = {
       origin(origin, callback) {
@@ -38,8 +38,7 @@ export class Startup {
       },
       credentials: true
     }
-
-    app.use(cors(corsOptions))
+    return corsOptions
   }
 
   static ConfigureRoutes(app) {
