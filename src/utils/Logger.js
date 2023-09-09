@@ -26,8 +26,12 @@ export class Logger {
     this._print('log', arguments)
   }
 
-  debug() {
+  trace() {
     this._print('trace', arguments)
+  }
+
+  debug() {
+    this._print('debug', arguments)
   }
 
   info() {
@@ -42,4 +46,5 @@ export class Logger {
     this._print('error', arguments)
   }
 }
+
 export const logger = new Logger()

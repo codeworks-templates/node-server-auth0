@@ -26,8 +26,8 @@ export class AuthHandler extends SocketHandler {
       }
       this.socket.join(user.id)
       attachHandlers(this.io, this.socket, user, limitedProfile)
-      this.socket.emit('authenticated', limitedProfile)
-      this.io.emit('userConnected', limitedProfile)
+      this.messageSelf('authenticated', limitedProfile)
+      this.messageAll('userConnected', limitedProfile)
     } catch (e) {
       this.socket.emit('error', e)
     }

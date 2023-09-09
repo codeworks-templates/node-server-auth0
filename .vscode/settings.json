@@ -1,4 +1,4 @@
 {
   "javascript.preferences.importModuleSpecifier": "relative",
-  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "javascript.preferences.importModuleSpecifierEnding": "js"
 }

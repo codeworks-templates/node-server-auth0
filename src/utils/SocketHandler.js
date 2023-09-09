@@ -15,6 +15,12 @@ export class SocketHandler {
     this.requiresAuth = requiresAuth
   }
 
+  /**
+   * 
+   * @param {string} event 
+   * @param {()=> void} fn 
+   * @returns 
+   */
   on(event, fn) {
     this.socket.on(event, (payload) => {
       try {
@@ -31,6 +37,35 @@ export class SocketHandler {
     })
     return this
   }
+
+  /**
+   * Message only the socket that initiated the request
+   * @param {string} event 
+   * @param {any} payload 
+   */
+  messageSelf(event, payload) {
+    this.socket.emit(event, payload)
+  }
+
+  /**
+   * Messages all sockets currently connected
+   * @param {string} event 
+   * @param {any} payload 
+   */
+  messageAll(event, payload) {
+    this.io.emit(event, payload)
+  }
+
+  /**
+   * Message all members of a room
+   * @param {string} room 
+   * @param {string} event 
+   * @param {any} payload 
+   */
+  messageRoom(room, event, payload) {
+    this.io.to(room).emit(event, payload)
+  }
+
 
   attachUser(user, profile) {
     this.user = user
