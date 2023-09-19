@@ -34,48 +34,43 @@ This library provides easily configured middleware that will validate user auth 
 - req.user: `{ UserIdentity }`
 - req.userInfo: `{ UserInfo }`
 
-### Enable RBAC or Extended Rules (required)
+### Login Userflow (required)
 
-In your auth0 dashboard be sure to enable RBAC or add in this custom rule
+In your auth0 dashboard you will want to create a custom userflow for login called `ExtendUserInfo`
 
 ```javascript
-//AUTH0 RULE
 /**
- * Add common namespaced properties to userInfo, 
- * note auth0 will strip any non namespaced properties
- */
-function extendUserInfo(user, context, callback) {
-    const namespace = 'https://YOURDOMAINHERE.auth0.com';
-    context.idToken = context.idToken || {};
-    context.authorization = context.authorization || {};
-    user.app_metadata = user.app_metadata || { };
-    user.app_metadata.new = user.app_metadata.id ? false : true;
-    user.app_metadata.id = user.app_metadata.id || generateId();
+* Handler that will be called during the execution of a PostLogin flow.
+*
+* @param {Event} event - Details about the user and the context in which they are logging in.
+* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
+*/
+exports.onExecutePostLogin = async (event, api) => {
+  if (!event.user.app_metadata.id) {
+    const id = generateId()
+    api.user.setAppMetadata('id', id)
+    api.idToken.setCustomClaim('id', id)
+    api.accessToken.setCustomClaim('id', id)
+  }
 
-    for (const key in user.app_metadata) {
-        context.idToken[`${namespace}/${key}`] = user.app_metadata[key];
-    }
-    context.idToken[`${namespace}/roles`] = context.authorization.roles;
-    context.idToken[`${namespace}/permissions`] = context.authorization.permissions;
-    context.idToken[`${namespace}/user_metadata`] = user.user_metadata;
-    
-    if(!user.app_metadata.new){
-        return callback(null, user, context);
-    }
-    delete user.app_metadata.new;
-    auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
-        .then(function () {
-            callback(null, user, context);
-        })
-        .catch(function (err) {
-            callback(err);
-        });  
-  
-  function generateId() {
-    let timestamp = (new Date().getTime() / 1000 | 0).toString(16);
-    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (
-      Math.random() * 16 | 0).toString(16)).toLowerCase();
-	}
+  extendTokens(event, api)
+};
+
+function extendTokens(event, api) {
+  const { identifier } = event.resource_server
+  const app_metadata = event.user.app_metadata
+  for (const key in app_metadata) {
+    const prop = `${identifier}/${key}`
+    const value = app_metadata[key];
+    api.idToken.setCustomClaim(prop, value);
+    api.accessToken.setCustomClaim(prop, value);
+  }
+}
+
+function generateId() {
+  let timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+  return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (
+    Math.random() * 16 | 0).toString(16)).toLowerCase();
 }
 ```
 
