@@ -1,6 +1,7 @@
 import { Server } from 'socket.io'
 import { logger } from './utils/Logger'
 import { attachHandlers } from '../Setup'
+import { Startup } from './Startup.js'
 
 const SOCKET_EVENTS = {
   connection: 'connection',
@@ -19,9 +20,7 @@ class SocketProvider {
   initialize(httpServer) {
     try {
       this.io = new Server(httpServer, {
-        cors: {
-          origin: process.env.NODE_ENV === 'dev' ? '*' : ''
-        }
+        cors: Startup.corsOptions
       })
       this.io.on(SOCKET_EVENTS.connection, (socket) => this.onConnect(socket))
     } catch (e) {
