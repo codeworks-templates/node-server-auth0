@@ -1,8 +1,8 @@
 import express from 'express'
 import { createServer } from 'http'
-import { DbConnection } from './db/DbConfig'
 import { socketProvider } from './SocketProvider'
 import { Startup } from './Startup'
+import { DbConnection } from './db/DbConfig'
 import { logger } from './utils/Logger'
 
 // create server & socketServer
@@ -26,5 +26,6 @@ DbConnection.connect()
 
 // Start Server
 httpServer.listen(port, () => {
-  logger.log(`[SERVING ON PORT: ${port}]`)
+  logger.log(`[NODE_ENV] ${process.env.NODE_ENV} ${process.version} `)
+  logger.log(`[SERVING ON PORT] http://localhost:${port} `)
 })

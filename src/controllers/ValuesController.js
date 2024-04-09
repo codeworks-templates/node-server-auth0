@@ -9,17 +9,11 @@ export class ValuesController extends BaseController {
       .get('', this.getAll)
       // NOTE If there is an authenticated user it will attach here otherwise allows through
       .get('/:id', Auth0Provider.tryAttachUserInfo, this.getOneValue)
-      // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
+      // NOTE: Beyond this point all routes require Authorization Bearer token
       .use(Auth0Provider.getAuthorizedUserInfo)
-      .post('', this.create)
+      .post('', this.create.bind(this))
   }
 
-  /**
-   * Sends all values back to the client
-   * @param {import("express").Request} request
-   * @param {import("express").Response} response
-   * @param {import("express").NextFunction} next
-   */
   async getAll(request, response, next) {
     try {
       response.send(['value1', 'value2'])
@@ -28,21 +22,21 @@ export class ValuesController extends BaseController {
     }
   }
 
-  /**
-   * Sends a single value by its id or error, back to the client
-   * @param {import("express").Request} request
-   * @param {import("express").Response} response
-   * @param {import("express").NextFunction} next
-   */
   async getOneValue(request, response, next) {
     try {
-      const value = valuesService.findById(request.params.id)
+      const value = await valuesService.findById(request.params.id)
       response.send(value)
     } catch (error) {
       next(error)
     }
   }
 
+  /**
+ * Creates a new value from request body and returns the value
+ * @param {import("express").Request} request
+ * @param {import("express").Response} response
+ * @param {import("express").NextFunction} next
+ */
   async create(request, response, next) {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
@@ -54,6 +48,3 @@ export class ValuesController extends BaseController {
     }
   }
 }
-
-
-

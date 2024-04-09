@@ -6,7 +6,7 @@
     "jsx": "preserve",
     "checkJs": true,
     "experimentalDecorators": true,
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
   },
   "exclude": [
     "node_modules",

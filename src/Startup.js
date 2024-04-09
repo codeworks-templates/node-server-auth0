@@ -4,7 +4,6 @@ import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
 import { Paths, RegisterControllers, RegisterSocketHandlers, UseStaticPages } from '../Setup'
-import { AccountValidator } from './utils/AccountValidator'
 import { logger } from './utils/Logger'
 
 export class Startup {
@@ -51,7 +50,6 @@ export class Startup {
 
   static ConfigureRoutes(app) {
     const router = express.Router()
-    app.use(AccountValidator)
     RegisterControllers(router)
     RegisterSocketHandlers()
     app.use(router)
