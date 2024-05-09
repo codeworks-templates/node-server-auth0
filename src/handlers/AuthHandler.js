@@ -1,6 +1,5 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { attachHandlers } from '../../Setup'
-import { accountService } from '../services/AccountService'
 import { SocketHandler } from '../utils/SocketHandler'
 
 export class AuthHandler extends SocketHandler {
@@ -18,15 +17,13 @@ export class AuthHandler extends SocketHandler {
   async onAuthenticate(bearerToken) {
     try {
       const user = await Auth0Provider.getUserInfoFromBearerToken(bearerToken)
-      const profile = await accountService.getAccount(user)
       const limitedProfile = {
-        id: profile.id,
-        email: profile.email,
-        picture: profile.picture
+        id: user.id,
+        picture: user.picture
       }
       this.socket.join(user.id)
       attachHandlers(this.io, this.socket, user, limitedProfile)
-      this.messageSelf('authenticated', limitedProfile)
+      this.messageSelf('authenticated', user)
       this.messageAll('userConnected', limitedProfile)
     } catch (e) {
       this.socket.emit('error', e)

@@ -1,7 +1,6 @@
-import { Server } from 'socket.io'
-import { logger } from './utils/Logger'
+import { Server, Socket } from 'socket.io'
 import { attachHandlers } from '../Setup'
-import { Startup } from './Startup.js'
+import { logger } from './utils/Logger'
 
 const SOCKET_EVENTS = {
   connection: 'connection',
@@ -20,20 +19,35 @@ class SocketProvider {
   initialize(httpServer) {
     try {
       this.io = new Server(httpServer, {
-        cors: Startup.corsOptions
+        cors: {
+          // TODO UPDATE THE origin for production
+          origin: '*',
+          methods: ['GET', 'POST']
+        }
       })
-      this.io.on(SOCKET_EVENTS.connection, (socket) => this.onConnect(socket))
+      this.io.on(SOCKET_EVENTS.connection, this.onConnect.bind(this))
     } catch (e) {
       logger.error('[SOCKETSTORE ERROR]', e)
     }
   }
 
+  /**
+   * 
+   * @param {Socket} socket 
+   */
   onConnect(socket) {
-    attachHandlers(this.io, socket)
-    socket.emit(SOCKET_EVENTS.connected, {
-      socket: socket.id,
-      message: 'Successfully Connected'
-    })
+    try {
+      attachHandlers(this.io, socket)
+      socket.emit(SOCKET_EVENTS.connected, {
+        sid: socket.id,
+        data: socket.data,
+        isConnected: socket.connected
+      })
+
+    }
+    catch (error) {
+      logger.error('[SOCKET_ATTACHMENT ERROR]', error)
+    }
   }
 
   /**
@@ -43,11 +57,7 @@ class SocketProvider {
    * @param {any} payload
    */
   messageUser(userId, eventName, payload) {
-    try {
-      this.io.to(userId).emit(eventName, payload)
-    } catch (e) {
-      logger.error('[SOCKET_ERROR] messageUser', e, { userId, eventName, payload })
-    }
+    this.io.to(userId).emit(eventName, payload)
   }
 
   /**
@@ -65,7 +75,7 @@ class SocketProvider {
    * @param {string} eventName
    * @param {any} payload
    */
-  message(eventName, payload) {
+  messageAll(eventName, payload) {
     this.io.emit(eventName, payload)
   }
 }
