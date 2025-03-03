@@ -87,12 +87,12 @@ auth0Provider.configure({
 
 // validates a request has a Bearer auth token in req.headers.authentication
 app.use("/authenticated", auth0Provider.isAuthenticated, (req, res, next) => {
-  res.send({ userIdentity: req.user });
+  res.send({ userIdentity: req.identity });
 });
 
 // validates the request token and extracts the userInfo saved in auth0
 app.use("/user-profile", getAuthorizedUserInfo, (req, res, next) => {
-  res.send({ userIdentity: req.user, userInfo: req.userInfo });
+  res.send({ userIdentity: req.identity, userInfo: req.userInfo });
 });
 
 // validates the request token, extracts the userIdentity and userInfo

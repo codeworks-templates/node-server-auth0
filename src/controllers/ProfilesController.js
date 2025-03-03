@@ -1,5 +1,5 @@
 import { profileService } from '../services/ProfileService.js'
-import BaseController from '../utils/BaseController'
+import BaseController from '../utils/BaseController.js'
 
 export class ProfilesController extends BaseController {
   constructor() {

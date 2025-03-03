@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import { AccountSchema } from '../models/Account'
-import { ValueSchema } from '../models/Value'
+import { AccountSchema } from '../models/Account.js'
+import { ValueSchema } from '../models/Value.js'
 
 class DbContext {
   Values = mongoose.model('Value', ValueSchema);

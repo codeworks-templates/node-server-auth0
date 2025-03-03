@@ -1,22 +1,26 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
-import { valuesService } from '../services/ValuesService.js'
-import BaseController from '../utils/BaseController'
+import BaseController from '../utils/BaseController.js'
+
+const VALUES = [
+  { id: 1, name: 'value1' },
+  { id: 2, name: 'value2' },
+]
+
 
 export class ValuesController extends BaseController {
   constructor() {
     super('api/values')
     this.router
       .get('', this.getAll)
-      // NOTE If there is an authenticated user it will attach here otherwise allows through
-      .get('/:id', Auth0Provider.tryAttachUserInfo, this.getOneValue)
+      .get('/:id', this.getOneValue)
       // NOTE: Beyond this point all routes require Authorization Bearer token
       .use(Auth0Provider.getAuthorizedUserInfo)
-      .post('', this.create.bind(this))
+      .post('', this.create)
   }
 
   async getAll(request, response, next) {
     try {
-      response.send(['value1', 'value2'])
+      response.send(VALUES)
     } catch (error) {
       next(error)
     }
@@ -24,7 +28,10 @@ export class ValuesController extends BaseController {
 
   async getOneValue(request, response, next) {
     try {
-      const value = await valuesService.findById(request.params.id)
+      const value = VALUES.find(v => v.id === parseInt(request.params.id))
+      if (!value) {
+        throw new Error('Invalid Id')
+      }
       response.send(value)
     } catch (error) {
       next(error)
@@ -39,10 +46,13 @@ export class ValuesController extends BaseController {
  */
   async create(request, response, next) {
     try {
+      const newValue = request.body
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
-      request.body.creatorId = request.userInfo.id
-
-      response.send(request.body)
+      newValue.creatorId = request.userInfo.id
+      newValue.id = VALUES.length + 1
+      VALUES.push(newValue)
+      // NOTE: This is a mock of what a service would do
+      response.send(newValue)
     } catch (error) {
       next(error)
     }

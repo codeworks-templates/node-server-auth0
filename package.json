@@ -3,26 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "debug": "node index.js",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "setup": "npm install"
+    "start": "node --env-file=.env --watch ./src/main.js"
   },
   "author": "Codeworks",
   "license": "ISC",
   "dependencies": {
-    "@bcwdev/auth0provider": "1.1.0",
+    "@bcwdev/auth0provider": "1.1.10",
     "cors": "2.8.5",
-    "dotenv": "16.4.5",
-    "esm-wallaby": "3.2.31",
-    "express": "4.19.2",
-    "helmet": "7.1.0",
-    "mongoose": "8.3.1",
-    "socket.io": "4.7.5"
+    "express": "4.21.2",
+    "helmet": "8.0.0",
+    "mongoose": "8.11.0",
+    "socket.io": "4.8.1"
   },
   "devDependencies": {
-    "eslint": "9.0.0",
-    "nodemon": "3.1.0"
+    "eslint": "9.21.0"
   }
 }

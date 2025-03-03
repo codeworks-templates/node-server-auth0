@@ -1,8 +1,12 @@
-import express from 'express'
 import fs from 'fs'
-import path from 'path'
-import BaseController from './src/utils/BaseController'
-import { logger } from './src/utils/Logger'
+import { fileURLToPath, pathToFileURL } from 'url'
+import { dirname, join } from 'path'
+import BaseController from './src/utils/BaseController.js'
+import { logger } from './src/utils/Logger.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 
 let ROUTE_PREFIX = process.env.ROUTE_PREFIX || ''
 if (ROUTE_PREFIX && ROUTE_PREFIX[0] != '/') {
@@ -11,11 +15,11 @@ if (ROUTE_PREFIX && ROUTE_PREFIX[0] != '/') {
 
 export class Paths {
   static get Public() {
-    return path.join(__dirname, 'www')
+    return join(__dirname, 'www')
   }
 
   static get Server() {
-    return path.join(__dirname, 'src')
+    return join(__dirname, 'src')
   }
 
   static get Controllers() {
@@ -27,37 +31,44 @@ export class Paths {
   }
 }
 
-export function RegisterControllers(router) {
-
-  const controllers = fs.readdirSync(Paths.Controllers)
+export function RegisterControllers(router, subdir = '') {
+  const directory = subdir ? join(Paths.Controllers, subdir) : Paths.Controllers
+  const controllers = fs.readdirSync(directory)
   controllers.forEach(loadController)
-  async function loadController(controllerName) {
+  logger.info('Controllers Registered', controllers.length)
+
+  async function loadController(filename) {
     try {
-      if (!controllerName.endsWith('.js')) return
-      const fileHandler = await import(Paths.Controllers + '/' + controllerName)
-      let ControllerClass = fileHandler[controllerName.slice(0, -3)]
-      if (!ControllerClass) {
-        throw new Error(`${controllerName} The exported class does not match the filename`)
+      if (!filename.endsWith('.js')) return
+
+      const controllerPath = pathToFileURL(join(directory, filename)).href
+      const fileHandler = await import(controllerPath)
+      const controllerClass = fileHandler[filename.slice(0, -3)]
+
+      if (filename !== controllerClass.name + '.js') {
+        throw new Error('Controller class name does not match file name')
       }
-      if (ControllerClass.default) {
-        ControllerClass = ControllerClass.default
+
+
+      if (fileHandler.default) {
+        controllerClass = fileHandler.default
       }
-      const controller = new ControllerClass()
-      if (controller instanceof BaseController) {
-        router.use(ROUTE_PREFIX + controller.mount, controller.router)
+
+      const controller = new controllerClass()
+      if (!(controller instanceof BaseController)) {
+        logger.warn('Skipped Controller since it is not a BaseController', controllerClass.name)
+        return
       }
+
+      router.use(controller.mount, controller.router)
     } catch (e) {
-      logger.error(
-        '[CONTROLLER ERROR] unable to load controller, potential duplication, review mount path and controller class name, and see error below',
-        controllerName,
+      console.error(
+        '[CONTROLLER ERROR] Unable to load controller, potential duplication, review mount path and controller class name',
+        filename,
         e
       )
     }
   }
-}
-
-export function UseStaticPages(app) {
-  app.use(ROUTE_PREFIX, express.static(Paths.Public))
 }
 
 const HANDLERS = []
@@ -65,22 +76,23 @@ const HANDLERS = []
 export async function RegisterSocketHandlers() {
   const directory = Paths.Handlers
   const handlers = fs.readdirSync(directory)
-  handlers.forEach(async (handlerName) => {
+  handlers.forEach(async (filename) => {
     try {
-      if (!handlerName.endsWith('.js')) { return }
-      const fileHandler = await import(directory + '/' + handlerName)
-      let HandlerClass = fileHandler[handlerName.slice(0, -3)]
-      if (!HandlerClass) {
-        throw new Error(`${handlerName} The exported class does not match the filename`)
+      if (!filename.endsWith('.js')) { return }
+
+      const handlerPath = pathToFileURL(join(Paths.Handlers, filename)).href
+      const fileHandler = await import(handlerPath)
+      const handlerClass = fileHandler[filename.slice(0, -3)]
+
+      if (fileHandler.default) {
+        handlerClass = fileHandler.default
       }
-      if (HandlerClass.default) {
-        HandlerClass = HandlerClass.default
-      }
-      HANDLERS.push(HandlerClass)
+
+      HANDLERS.push(handlerClass)
     } catch (e) {
       logger.error(
         '[SOCKET_HANDLER_ERROR] unable to attach socket handler, potential duplication, review mount path and controller class name, and see error below',
-        handlerName,
+        filename,
         e
       )
     }
@@ -92,4 +104,11 @@ export async function attachHandlers(io, socket, user, profile) {
     return socket._handlers.forEach(handler => handler.attachUser(user, profile))
   }
   socket._handlers = HANDLERS.map(Handler => new Handler(io, socket))
+}
+
+
+export function UseStaticPages(router) {
+  router.use(ROUTE_PREFIX, (req, res) => {
+    res.sendFile(join(Paths.Public, 'index.html'))
+  })
 }

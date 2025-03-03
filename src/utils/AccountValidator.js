@@ -1,5 +1,5 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
-import { accountService } from '../services/AccountService'
+import { accountService } from '../services/AccountService.js'
 
 export async function AccountValidator(req, res, next) {
   try {

@@ -7,43 +7,49 @@ export class Logger {
     return `${new Date().toLocaleTimeString('en-US')}${this.tag ? '::[' + this.tag + ']' : ''}`
   }
 
-  _print(method, args) {
+  _print(method, args, colorCode = '\x1b[0m') {
     if (process.env.NODE_ENV === 'dev') {
       // eslint-disable-next-line no-console
-      console[method](this.prefix, ...args)
+      console[method](`${this.prefix} ${colorCode}`, ...args, '\x1b[0m');
     } else {
       switch (method) {
         case 'log':
         case 'debug':
-          return
+          return;
       }
       // eslint-disable-next-line no-console
-      console[method](this.prefix, ...args)
+      console[method](`${this.prefix} ${colorCode}`, ...args, '\x1b[0m');
     }
   }
 
   log() {
-    this._print('log', arguments)
+    // COLOR: Green
+    this._print('log', arguments, '\x1b[32m%s\x1b[0m')
   }
 
   trace() {
-    this._print('trace', arguments)
+    // COLOR: White
+    this._print('trace', arguments, '\x1b[37m%s\x1b[0m')
   }
 
   debug() {
-    this._print('debug', arguments)
+    // COLOR: Magenta
+    this._print('debug', arguments, '\x1b[35m%s\x1b[0m')
   }
 
   info() {
-    this._print('info', arguments)
+    // COLOR: Cyan
+    this._print('info', arguments, '\x1b[36m%s\x1b[0m')
   }
 
   warn() {
-    this._print('warn', arguments)
+    // COLOR: Yellow
+    this._print('warn', arguments, '\x1b[33m%s\x1b[0m')
   }
 
   error() {
-    this._print('error', arguments)
+    // COLOR: Red
+    this._print('error', arguments, '\x1b[31m%s\x1b[0m')
   }
 }
 

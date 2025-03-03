@@ -1,4 +1,4 @@
-import { dbContext } from '../db/DbContext'
+import { dbContext } from '../db/DbContext.js'
 
 // Private Methods
 

@@ -1,10 +1,10 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
-import { json } from 'body-parser'
+import bp from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
-import { Paths, RegisterControllers, RegisterSocketHandlers, UseStaticPages } from '../Setup'
-import { logger } from './utils/Logger'
+import { Paths, RegisterControllers, RegisterSocketHandlers, UseStaticPages } from '../Setup.js'
+import { logger } from './utils/Logger.js'
 
 export class Startup {
   static ConfigureGlobalMiddleware(app) {
@@ -15,7 +15,8 @@ export class Startup {
       crossOriginEmbedderPolicy: false,
       crossOriginResourcePolicy: { policy: 'cross-origin' }
     }))
-    app.use(json({ limit: '50mb' }))
+    app.use(bp.json({ limit: '50mb' }))
+    app.use(bp.urlencoded({ limit: '50mb', extended: true }))
     Startup.UseAuth()
   }
 
@@ -37,7 +38,7 @@ export class Startup {
     const allowedDomains = []
     const corsOptions = {
       origin(origin, callback) {
-        if (process.env.NODE_ENV === 'dev') {
+        if (process.env.NODE_ENV === 'dev' || !origin) {
           return callback(null, true)
         }
         const originIsWhitelisted = allowedDomains.indexOf(origin) !== -1

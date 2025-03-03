@@ -2,7 +2,7 @@
   "Controller": {
     "prefix": "controller",
     "body": [
-      "import BaseController from '../utils/BaseController'",
+      "import BaseController from '../utils/BaseController.js'",
       "export class ${1}Controller extends BaseController {",
       "  constructor() {",
       "    super('${2}');",
