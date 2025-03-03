@@ -43,7 +43,7 @@ export function RegisterControllers(router, subdir = '') {
 
       const controllerPath = pathToFileURL(join(directory, filename)).href
       const fileHandler = await import(controllerPath)
-      const controllerClass = fileHandler[filename.slice(0, -3)]
+      let controllerClass = fileHandler[filename.slice(0, -3)]
 
       if (filename !== controllerClass.name + '.js') {
         throw new Error('Controller class name does not match file name')
@@ -82,7 +82,7 @@ export async function RegisterSocketHandlers() {
 
       const handlerPath = pathToFileURL(join(Paths.Handlers, filename)).href
       const fileHandler = await import(handlerPath)
-      const handlerClass = fileHandler[filename.slice(0, -3)]
+      let handlerClass = fileHandler[filename.slice(0, -3)]
 
       if (fileHandler.default) {
         handlerClass = fileHandler.default
