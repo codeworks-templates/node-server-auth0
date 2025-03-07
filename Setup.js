@@ -3,9 +3,12 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import { dirname, join } from 'path'
 import BaseController from './src/utils/BaseController.js'
 import { logger } from './src/utils/Logger.js'
+import { createOpenAPISpec } from './src/utils/openAPI.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+const CONTROLLERS = []
+const HANDLERS = []
 
 
 let ROUTE_PREFIX = process.env.ROUTE_PREFIX || ''
@@ -31,10 +34,10 @@ export class Paths {
   }
 }
 
-export function RegisterControllers(router, subdir = '') {
+export async function RegisterControllers(router, subdir = '') {
   const directory = subdir ? join(Paths.Controllers, subdir) : Paths.Controllers
   const controllers = fs.readdirSync(directory)
-  controllers.forEach(loadController)
+  await Promise.allSettled(controllers.map(loadController))
   logger.info('Controllers Registered', controllers.length)
 
   async function loadController(filename) {
@@ -60,6 +63,7 @@ export function RegisterControllers(router, subdir = '') {
         return
       }
 
+      CONTROLLERS.push(controller)
       router.use(controller.mount, controller.router)
     } catch (e) {
       console.error(
@@ -70,8 +74,6 @@ export function RegisterControllers(router, subdir = '') {
     }
   }
 }
-
-const HANDLERS = []
 
 export async function RegisterSocketHandlers() {
   const directory = Paths.Handlers
@@ -111,4 +113,14 @@ export function UseStaticPages(router) {
   router.use(ROUTE_PREFIX, (req, res) => {
     res.sendFile(join(Paths.Public, 'index.html'))
   })
+}
+
+
+export function generateOpenAPISpec() {
+  try {
+    const spec = createOpenAPISpec(CONTROLLERS)
+    fs.writeFileSync(Paths.Public + '/swagger.json', JSON.stringify(spec, null, 2));
+  } catch (e) {
+    logger.error('Error generating OpenAPI Spec', e)
+  }
 }

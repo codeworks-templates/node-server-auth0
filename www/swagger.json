@@ -1,0 +1,434 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0",
+    "description": "Auto Generated API Documentation"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/values": {
+      "get": {
+        "summary": "Handler: getAll",
+        "description": "Middlewares: getAll",
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "creatorId": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "_id": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "__v": {
+                      "type": "number",
+                      "required": false
+                    },
+                    "{creator}": {
+                      "type": "virtual",
+                      "required": false
+                    },
+                    "{id}": {
+                      "type": "virtual",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Handler: create",
+        "description": "Middlewares: create",
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "creatorId": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "_id": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "__v": {
+                      "type": "number",
+                      "required": false
+                    },
+                    "{creator}": {
+                      "type": "virtual",
+                      "required": false
+                    },
+                    "{id}": {
+                      "type": "virtual",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/values/:id": {
+      "get": {
+        "summary": "Handler: getOneValue",
+        "description": "Middlewares: getOneValue",
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "description": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "creatorId": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "_id": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "__v": {
+                      "type": "number",
+                      "required": false
+                    },
+                    "{creator}": {
+                      "type": "virtual",
+                      "required": false
+                    },
+                    "{id}": {
+                      "type": "virtual",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account": {
+      "get": {
+        "summary": "Handler: getUserAccount",
+        "description": "Middlewares: getUserAccount",
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subs": {
+                      "type": "array",
+                      "required": false
+                    },
+                    "email": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "name": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "picture": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "_id": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "__v": {
+                      "type": "number",
+                      "required": false
+                    },
+                    "{id}": {
+                      "type": "virtual",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Handler: editUserAccount",
+        "description": "Middlewares: editUserAccount",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subs": {
+                      "type": "array",
+                      "required": false
+                    },
+                    "email": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "name": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "picture": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "_id": {
+                      "type": "string",
+                      "required": false
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "required": false
+                    },
+                    "__v": {
+                      "type": "number",
+                      "required": false
+                    },
+                    "{id}": {
+                      "type": "virtual",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/profiles": {
+      "get": {
+        "summary": "Handler: getProfiles",
+        "description": "Middlewares: getProfiles",
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": "Unknown structure (variable: profiles)"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/profiles/:id": {
+      "get": {
+        "summary": "Handler: getProfile",
+        "description": "Middlewares: getProfile",
+        "responses": {
+          "200": {
+            "description": "Response for status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": "Unknown structure (variable: profile)"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Values": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "creatorId": {
+            "type": "string",
+            "required": true
+          },
+          "_id": {
+            "type": "string",
+            "required": false
+          },
+          "createdAt": {
+            "type": "date",
+            "required": false
+          },
+          "updatedAt": {
+            "type": "date",
+            "required": false
+          },
+          "__v": {
+            "type": "number",
+            "required": false
+          },
+          "{creator}": {
+            "type": "virtual",
+            "required": false
+          },
+          "{id}": {
+            "type": "virtual",
+            "required": false
+          }
+        }
+      },
+      "Account": {
+        "type": "object",
+        "properties": {
+          "subs": {
+            "type": "array",
+            "required": false
+          },
+          "email": {
+            "type": "string",
+            "required": false
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "picture": {
+            "type": "string",
+            "required": false
+          },
+          "_id": {
+            "type": "string",
+            "required": false
+          },
+          "createdAt": {
+            "type": "date",
+            "required": false
+          },
+          "updatedAt": {
+            "type": "date",
+            "required": false
+          },
+          "__v": {
+            "type": "number",
+            "required": false
+          },
+          "{id}": {
+            "type": "virtual",
+            "required": false
+          }
+        }
+      }
+    }
+  }
+}

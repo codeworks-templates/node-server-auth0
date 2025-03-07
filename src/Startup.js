@@ -3,7 +3,7 @@ import bp from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
-import { Paths, RegisterControllers, RegisterSocketHandlers, UseStaticPages } from '../Setup.js'
+import { generateOpenAPISpec, Paths, RegisterControllers, RegisterSocketHandlers, UseStaticPages } from '../Setup.js'
 import { logger } from './utils/Logger.js'
 
 export class Startup {
@@ -49,13 +49,18 @@ export class Startup {
     return corsOptions
   }
 
-  static ConfigureRoutes(app) {
+  static async ConfigureRoutes(app) {
     const router = express.Router()
-    RegisterControllers(router)
+    await RegisterControllers(router)
     RegisterSocketHandlers()
     app.use(router)
     UseStaticPages(app)
     Startup.registerErrorHandlers(app)
+
+    if (process.env.USE_SWAGGER) {
+      generateOpenAPISpec()
+    }
+
   }
 
   static registerErrorHandlers(app) {
