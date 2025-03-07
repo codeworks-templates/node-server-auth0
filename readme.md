@@ -15,6 +15,10 @@ AUTH_AUDIENCE=
 AUTH_CLIENT_ID=
 ```
 
+### OpenAPI 3.0.0
+This template includes an opt-in environment variable that will produce a swagger file based on the controllers and schemas found within the application. set the `USE_SWAGGER` variable to true and the application will generate a `swagger.json` file in the public (*www*) path of the server. This file can be used with any OpenAPI 3.0.0 compatible tool.
+
+
 ### MVC - Controllers
 
 This template will automatically register all of the controllers found in the controllers folder of the server. This opinionated workflow should help provide a structure on how to build your api. Generally speaking every controller method should start with a `try catch block` and utilize the default error handler setup in Startup.js This means if a request ever fails the controller should call the next function with the error provided.
@@ -31,7 +35,7 @@ Models are defined as mongoose schemas and then imported into a central location
 
 This library provides easily configured middleware that will validate user auth tokens, roles, permissions and provides a simple approach to get userInfo associted with a user account. Each middleware will call next with an error on any failure so be sure to setup a default error handler. Also note that we extend the express request object with
 
-- req.user: `{ UserIdentity }`
+- req.identity: `{ UserIdentity }`
 - req.userInfo: `{ UserInfo }`
 
 ### Login Userflow (required)
