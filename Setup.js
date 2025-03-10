@@ -119,7 +119,7 @@ export function UseStaticPages(router) {
 export function generateOpenAPISpec() {
   try {
     const spec = createOpenAPISpec(CONTROLLERS)
-    fs.writeFileSync(Paths.Public + '/swagger.json', JSON.stringify(spec, null, 2));
+    fs.writeFileSync('./swagger.json', JSON.stringify(spec, null, 2));
   } catch (e) {
     logger.error('Error generating OpenAPI Spec', e)
   }

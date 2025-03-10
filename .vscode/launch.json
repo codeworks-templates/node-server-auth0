@@ -12,6 +12,15 @@
                 "<node_internals>/**"
             ],
             "type": "node-terminal"
+        },
+        {
+            "name": "Start Swagger",
+            "request": "launch",
+            "command": "npm run swagger",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node-terminal"
         }
     ]
 }

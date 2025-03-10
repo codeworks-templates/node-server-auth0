@@ -48,6 +48,7 @@ export class ValuesController extends BaseController {
     try {
       const newValue = request.body
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
+      // @ts-ignore
       newValue.creatorId = request.userInfo.id
       newValue.id = VALUES.length + 1
       VALUES.push(newValue)

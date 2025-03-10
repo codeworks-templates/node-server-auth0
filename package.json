@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env --watch ./src/main.js"
+    "start": "node --env-file=.env --watch ./src/main.js",
+    "swagger": "npx swagger-ui-watcher swagger.json"
   },
   "author": "Codeworks",
   "license": "ISC",

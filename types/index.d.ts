@@ -1,15 +1,18 @@
 export { };
+
 declare global {
   namespace Express {
-    export interface Request {
-      userInfo?: User;
+    interface Request {
+      identity?: UserInfo;
+      userInfo?: UserInfo;
     }
   }
 }
 
-type User = {
+type UserInfo = {
   id: string;
   email: string;
   picture: string;
   subs: string[];
-}
+  permissions: string[];
+};
