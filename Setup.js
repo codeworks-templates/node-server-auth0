@@ -48,7 +48,7 @@ export async function RegisterControllers(router, subdir = '') {
       const fileHandler = await import(controllerPath)
       let controllerClass = fileHandler[filename.slice(0, -3)]
 
-      if (filename !== controllerClass.name) {
+      if (filename !== controllerClass.name + '.js') {
         throw new Error('Controller class name does not match file name')
       }
 
