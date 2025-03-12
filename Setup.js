@@ -1,4 +1,5 @@
 import fs from 'fs'
+import express from 'express'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { dirname, join } from 'path'
 import BaseController from './src/utils/BaseController.js'
@@ -109,9 +110,7 @@ export async function attachHandlers(io, socket, user, profile) {
 
 
 export function UseStaticPages(router) {
-  router.use(ROUTE_PREFIX, (req, res) => {
-    res.sendFile(join(Paths.Public, 'index.html'))
-  })
+  router.use(ROUTE_PREFIX, express.static(Paths.Public))
 }
 
 

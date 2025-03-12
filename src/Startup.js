@@ -54,8 +54,8 @@ export class Startup {
     await RegisterControllers(router)
     RegisterSocketHandlers()
     app.use(router)
-    Startup.registerErrorHandlers(app)
     UseStaticPages(app)
+    Startup.registerErrorHandlers(app)
 
     if (process.env.USE_SWAGGER) {
       generateOpenAPISpec()
