@@ -38,4 +38,4 @@ COPY --from=client-builder /app/client/dist /app/server/www
 EXPOSE 3000
 
 # Define the command to start your Node.js application
-CMD [ "node", "index.js" ]
+CMD [ "node", "src/main.js" ]
